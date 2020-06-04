@@ -1,9 +1,10 @@
 #include "bufferManager.h"
 #include <bits/stdc++.h>
+#include <cstring>
 using namespace std;
 
 Page::Page(){
-    buffer = new char[PAGESIZE];//申请buffer空间 
+    buffer = new char[PAGESIZE];//申请buffer空间
     initialize();//成员变量初始化
 }
 
@@ -12,6 +13,7 @@ Page::~Page(){
 }
 
 void Page::initialize(){
+    memset(buffer,0,PAGESIZE);
     file = "";
     blockID = -1;
     dirty = false;
