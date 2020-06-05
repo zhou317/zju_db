@@ -259,7 +259,7 @@ void TreeNode<T>::debug_print() {
         cout<<" vals|";
         for(int i = 0;i<key_num;i++)
             cout<<vals[i]<<"->";
-        cout<<"|";
+        cout<<"|\n";
     }
 }
 

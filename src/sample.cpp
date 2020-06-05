@@ -6,7 +6,7 @@
 BufferManager buffer_manager;
 using namespace std;
 
-
+//
 //int main ()
 //{
 //    FILE * pFile;
@@ -24,7 +24,7 @@ using namespace std;
 //    }
 //    return 0;
 //}
-
+//
 int main(){
     clock_t start,end;
     start=clock();
@@ -45,7 +45,7 @@ int main(){
 //    start=clock();
 //    BPTree<int> *intBPTree =
 //            new BPTree<int>("test.idx",sizeof(int),8);
-//    for(int i = 0;i < 1000;i++){
+//    for(int i = 0;i < 10000;i++){
 //        intBPTree->insertKey(i,i);
 //    }
 ////    intBPTree->debug_print();
@@ -53,7 +53,7 @@ int main(){
 ////    intBPTree->scan_leaf();
 //    int tmp = 5;
 //    cout<<"test for search value from key(5):"<<intBPTree->searchVal(tmp)<<endl;
-//    for(int i = 0;i < 1000;i+=2){
+//    for(int i = 2;i < 10000;i+=2){
 //        intBPTree->deleteKey(i);
 //    }
 ////    intBPTree->debug_print();

@@ -11,6 +11,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <bitset>
+#include "config.h"
 #include <cstring>
 
 //去掉debug信息
@@ -85,7 +87,7 @@ public:
     void scan_leaf(){
         tree_ptr tmp = leaf_start;
         while(tmp != NULL){
-            tmp->debug_print_onlykey();
+            tmp->debug_print();
             tmp = tmp->next_leaf;
         }
         cout<<endl;
@@ -553,16 +555,27 @@ void BPTree<T>::readFromDisk() {
     cout<<"Read index from file: "<<filePath<<endl;
 #endif
     getFile(filePath);
-    int block_num = getBlockNum(filePath);
-    if(block_num <=0) block_num = 1;
 #ifndef ZZHDEBUG
     cout<<"File has "<<block_num<<" blocks.\n";
 #endif
+    FILE * pFile;
+    long size;
+    pFile = fopen (filePath.c_str(),"r");
+    if (pFile==NULL)
+        perror ("Error opening file");
+    else
+    {
+        fseek (pFile, 0, SEEK_END);   ///将文件指针移动文件结尾
+        size=ftell (pFile); ///求出当前文件指针距离文件开始的字节数
+        fclose (pFile);
+    }
+    if(size == 0) return;//并没有索引
+    //文件需要多少个page
+    int block_num = size / PAGESIZE + 1;
     for(int i = 0;i < block_num;i++){
 
         int pgid = buffer_manager.getPageID(filePath,i);
         char* p = buffer_manager.getPageBuffer(pgid);
-        //cout<<" =============file block: "<<i<<" pgid: "<<pgid<<" addr: "<<int((void*)p)<<endl;
         readFromDiskBlock(p,p+PAGESIZE);
     }
 }
@@ -583,20 +596,34 @@ void BPTree<T>::dropTree(tree_ptr node) {
     return;
 }
 
+bool zero_key = true;
 template<class T>
 void BPTree<T>::readFromDiskBlock(char *s, char *e) {
+
     int value_size = sizeof(int);
     T key;
     int val;
     //遍历page,向树插入key,val对
     //当还在这一页，且未到达末尾
-    while (s < e && s[0] != '\0'){
+    char * ts = s;
+    while (ts < e){
         //得到key,val
-        key = *(T*)s;
-        val = *(int*)(s+key_size);
-        s += key_size+value_size;
-        //cout<<"insert "<<key<<"-"<<val<<endl;
-        insertKey(key,val);
+        key = *(T*)ts;
+        val = *(int*)(ts+key_size);
+        ts += key_size+value_size;
+
+        if((key == 0 && val == 0)){
+            if(key_size == 4 && zero_key){
+                zero_key = false;
+                //判断是的确插入0-0 还是page里面的空值
+                //如果是float和int，且key val = 0
+                insertKey(key,val);
+            }else{
+                //是字符串类型
+            }
+        }else{
+            insertKey(key,val);
+        }
     }
 }
 
@@ -643,21 +670,21 @@ void BPTree<T>::writtenBackDisk() {
         for(int k = 0;k < leaf_tmp->key_num;k++){
             char*key = (char*)&(leaf_tmp->keys[k]);
             char*val = (char*)&(leaf_tmp->vals[k]);
+#ifndef ZZHINDEXPAGEDEBUG
+            cout<<"write into "<<leaf_tmp->keys[k]<<"-"<<leaf_tmp->vals[k]<<endl;
+            cout<<"write into page "<<pgid<<" and offset is "<<offset<<" adddr: "<<(void*)(p+offset)<<" num "<<i<<endl;
+#endif
             memcpy(p+offset,key,key_size);
             offset += key_size;
             memcpy(p+offset,val,value_size);
             offset += value_size;
             //向page中写入的serch_key加1
             i++;
-#ifndef ZZHINDEXPAGEDEBUG
-            cout<<"write into "<<leaf_tmp->keys[k]<<"-"<<leaf_tmp->vals[k]<<endl;
-            cout<<"write into page "<<pgid<<" and offset is "<<offset<<" num "<<i<<endl;
-#endif
         }
-        //将当前的页设置为脏页
         leaf_tmp = leaf_tmp->next_leaf;
-        buffer_manager.setPageDirty(pgid, true);
     }
+    //将当前的页设置为脏页
+    buffer_manager.setPageDirty(pgid, true);
 }
 
 template<class T>

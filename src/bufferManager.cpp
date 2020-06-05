@@ -43,7 +43,7 @@ BufferManager::~BufferManager(){
 }
 
 bool BufferManager::loadPage(string file, int blockID, int pageID){
-    FILE* f = fopen(file.c_str(), "r");
+    FILE* f = fopen(file.c_str(), "r+b");
     if (f==NULL) return false;//若无该文件返回false
     fseek(f, PAGESIZE * blockID, SEEK_SET);//根据blockID偏移
     fread(pages[pageID].buffer, PAGESIZE, 1, f);//写入buffer
@@ -88,7 +88,7 @@ void BufferManager::setPagePin(int pageID, bool pin){
 
 void BufferManager::flushPage(int pageID){
     if (pages[pageID].dirty == false) return;
-    FILE* f = fopen(pages[pageID].file.c_str(), "r+");
+    FILE* f = fopen(pages[pageID].file.c_str(), "r+b");
     fseek(f, PAGESIZE * pages[pageID].blockID, SEEK_SET);//根据blockID偏移
     fwrite(pages[pageID].buffer, PAGESIZE, 1, f);//写入硬盘
     fclose(f);
