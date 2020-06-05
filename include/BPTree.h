@@ -606,11 +606,12 @@ void BPTree<T>::readFromDiskBlock(char *s, char *e) {
     //遍历page,向树插入key,val对
     //当还在这一页，且未到达末尾
     char * ts = s;
-    while (ts < e){
+    int total_size = key_size+value_size;
+    while (ts + total_size < e){
         //得到key,val
         key = *(T*)ts;
         val = *(int*)(ts+key_size);
-        ts += key_size+value_size;
+        ts += total_size;
 
         if((key == 0 && val == 0)){
             if(key_size == 4 && zero_key){
