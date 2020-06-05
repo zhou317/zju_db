@@ -6,18 +6,37 @@
 BufferManager buffer_manager;
 using namespace std;
 
-//int main(){
-//    clock_t start,end;
-//    start=clock();
-//    BPTree<int> *intBPTree =
-//            new BPTree<int>("test.idx",sizeof(int),8);
-//    end=clock();		//程序结束用时
-//    double endtime=(double)(end-start)/CLOCKS_PER_SEC;
-//    cout<<"Total time:"<<endtime<<endl;		//s为单位
-//    cout<<"Total time:"<<endtime*1000<<"ms"<<endl;	//ms为单位
-////    intBPTree->debug_print();
-////    intBPTree->scan_leaf();
+
+//int main ()
+//{
+//    FILE * pFile;
+//    long size;
+//
+//    pFile = fopen ("..\\database\\index\\test.idx","r");
+//    if (pFile==NULL)
+//        perror ("Error opening file");
+//    else
+//    {
+//        fseek (pFile, 0, SEEK_END);   ///将文件指针移动文件结尾
+//        size=ftell (pFile); ///求出当前文件指针距离文件开始的字节数
+//        fclose (pFile);
+//        printf ("Size of file.cpp: %ld bytes.\n",size);
+//    }
+//    return 0;
 //}
+
+int main(){
+    clock_t start,end;
+    start=clock();
+    BPTree<int> *intBPTree =
+            new BPTree<int>("test.idx",sizeof(int),8);
+    end=clock();		//程序结束用时
+    double endtime=(double)(end-start)/CLOCKS_PER_SEC;
+    cout<<"Total time:"<<endtime<<endl;		//s为单位
+    cout<<"Total time:"<<endtime*1000<<"ms"<<endl;	//ms为单位
+//    intBPTree->debug_print();
+    intBPTree->scan_leaf();
+}
 
 //
 // //todo:B+树测试
@@ -26,7 +45,7 @@ using namespace std;
 //    start=clock();
 //    BPTree<int> *intBPTree =
 //            new BPTree<int>("test.idx",sizeof(int),8);
-//    for(int i = 0;i < 10000;i++){
+//    for(int i = 0;i < 1000;i++){
 //        intBPTree->insertKey(i,i);
 //    }
 ////    intBPTree->debug_print();
@@ -34,7 +53,7 @@ using namespace std;
 ////    intBPTree->scan_leaf();
 //    int tmp = 5;
 //    cout<<"test for search value from key(5):"<<intBPTree->searchVal(tmp)<<endl;
-//    for(int i = 0;i < 10000;i+=2){
+//    for(int i = 0;i < 1000;i+=2){
 //        intBPTree->deleteKey(i);
 //    }
 ////    intBPTree->debug_print();

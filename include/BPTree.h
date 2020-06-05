@@ -16,7 +16,7 @@
 //去掉debug信息
 #define ZZHDEBUG
 #define ZZHDELETEDEBUG
-#define ZZHINDEXPAGEDEBUG
+//#define ZZHINDEXPAGEDEBUG
 
 using namespace std;
 extern BufferManager buffer_manager;
