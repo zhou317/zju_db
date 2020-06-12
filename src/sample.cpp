@@ -3,164 +3,192 @@
 #include "BPTree.h"
 #include <ctime>
 #include "catalogManager.h"
+#include "IndexManager.h"
 
 BufferManager buffer_manager;
+CatalogManager catalog;
+IndexManager idxMana(catalog);
 using namespace std;
 
+//todo:索引管理测试
 
-int main()
-{
-    CatalogManager catalog;
+int main(){
 
-    //展示操作
-    catalog.show_Table();
-    catalog.show_Index();
-
-    //是否存在
-    cout << catalog.has_Table("student") << "    " << catalog.has_Table("book") << endl;
-    //前者存在，后者不存在
-
-    cout << catalog.has_Index("student", "id") << "    " << catalog.has_Index("index_id") << endl;
-    //两者都存在
-
-    cout << catalog.has_Attribute("student2", "id") << endl;
-    //存在
-
-    Attribute A("class", 1, 10, 0, 0);
-
-    //建立操作
-    try {
-        catalog.create_Attribute("student", A);
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    //catalog.show_Table(); 成功插入
-
-    vector<Attribute> car;
-
-    Attribute B("id", 1, 10, 1, 1); car.push_back(B);
-    Attribute C("onwer", 2, 10, 0, 0); car.push_back(C);
-    Attribute D("price", 3, 10, 0, 0); car.push_back(D);
-    Table Car("car", 3, 20, car);
-
-    try {
-        catalog.create_Table(Car);
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    //成功插入
-
-    try {
-        catalog.create_Table(Car);
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    //再次尝试插入，报错，表重复
-
-    Index bid("book", "id", "index_bid", 30);
-
-    try {
-        catalog.create_Index(bid);
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-
-    //更新操作
-
-    Attribute E("name", 2, 20, 0, 0);
-
-    try {
-        catalog.update_Attribute("student", E);
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    //成功更新
-
-    car.push_back(E);
-    Table car_new("car", 4, 20, car);
-
-    try {
-        catalog.update_Table(car_new);
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    //成功更新
-
-    Index index_ID("student", "id", "index_id", 21);
-    try {
-        catalog.update_Index(index_ID);
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-
-    //删除操作
-
-    try {
-        catalog.drop_Table("car");
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    //成功删除
-
-    try {
-        catalog.drop_Table("car");
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    //再次尝试删除，报错，表不存在
-
-
-    try {
-        catalog.drop_Atttribute("student","class");
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    //成功删除
-
-    try {
-        catalog.drop_Index("index_bid");
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-
-
-    //查询操作
-    try {
-        Table p = catalog.get_Table("student");
-        cout << p.name << endl;
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-    try {
-        Attribute q = catalog.get_Attribute("student", "id");
-        cout << q.name << endl;
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-
-    try {
-        Index o = catalog.get_Index("student","id");
-        cout << o.index_name << endl;
-    }
-    catch (TableExpection e) {
-        cout << e.what() << endl;
-    }
-
-    return 0;
+    return 1;
 }
+
+
+
+
+////todo:catalog 测试
+//int main()
+//{
+//    CatalogManager catalog;
+//
+//    //展示操作
+//    catalog.show_Table();
+//    catalog.show_Index();
+//
+//    //是否存在
+//    cout << catalog.has_Table("student") << "    " << catalog.has_Table("book") << endl;
+//    //前者存在，后者不存在
+//
+//    cout << catalog.has_Index("student", "id") << "    " << catalog.has_Index("index_id") << endl;
+//    //两者都存在
+//
+//    cout << catalog.has_Attribute("student2", "id") << endl;
+//    //存在
+//
+//    Attribute A("class", 1, 10, 0, 0);
+//
+//    //建立操作
+//    try {
+//        catalog.create_Attribute("student", A);
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    //catalog.show_Table(); 成功插入
+//
+//    cout<<" ================ "<<endl;
+//    catalog.show_Table();
+//
+//
+//    vector<Attribute> car;
+//
+//    Attribute B("id", 1, 10, 1, 1); car.push_back(B);
+//    Attribute C("onwer", 2, 10, 0, 0); car.push_back(C);
+//    Attribute D("price", 3, 10, 0, 0); car.push_back(D);
+//    Table Car("car", 3, 20, car);
+//
+//    try {
+//        catalog.create_Table(Car);
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    //成功插入
+//    cout<<" ================ table car created"<<endl;
+//    catalog.show_Table();
+//
+//    try {
+//        catalog.create_Table(Car);
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    //再次尝试插入，报错，表重复
+//
+//    Index bid("book", "id", "index_bid", 30);
+//
+//    try {
+//        catalog.create_Index(bid);
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    cout<<"=============create a new index on book"<<endl;
+//    catalog.show_Index();
+//    //更新操作
+//
+//    Attribute E("name", 2, 44, 0, 0);
+//
+//    try {
+//        catalog.update_Attribute("student", E);
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    //成功更新
+//    cout<<" ================ update tabel "<<endl;
+//    catalog.show_Table();
+//
+//
+//    car.push_back(E);
+//    Table car_new("car", 4, 20, car);
+//
+//    try {
+//        catalog.update_Table(car_new);
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    //成功更新
+//    cout<<" ================ update a table "<<endl;
+//    catalog.show_Table();
+//
+//    Index index_ID("student", "id", "index_id", 21);
+//    try {
+//        catalog.update_Index(index_ID);
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    cout<<"=============create a new index"<<endl;
+//    catalog.show_Index();
+//    //删除操作
+//
+//    try {
+//        catalog.drop_Table("car");
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    //成功删除
+//
+//    try {
+//        catalog.drop_Table("car");
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    //再次尝试删除，报错，表不存在
+//
+//
+//    try {
+//        catalog.drop_Atttribute("student","class");
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    //成功删除
+//
+//    try {
+//        catalog.drop_Index("index_bid");
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//
+//
+//    //查询操作
+//    try {
+//        Table p = catalog.get_Table("student");
+//        cout << p.name << endl;
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//    try {
+//        Attribute q = catalog.get_Attribute("student", "id");
+//        cout << q.name << endl;
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//
+//    try {
+//        Index o = catalog.get_Index("student","id");
+//        cout << o.index_name << endl;
+//    }
+//    catch (TableExpection e) {
+//        cout << e.what() << endl;
+//    }
+//
+//    return 0;
+//}
+
+
 
 //todo:B+树磁盘读取测试
 //

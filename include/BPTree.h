@@ -18,7 +18,7 @@
 //去掉debug信息
 #define ZZHDEBUG
 #define ZZHDELETEDEBUG
-//#define ZZHINDEXPAGEDEBUG
+#define ZZHINDEXPAGEDEBUG
 
 using namespace std;
 extern BufferManager buffer_manager;
@@ -597,6 +597,8 @@ void BPTree<T>::dropTree(tree_ptr node) {
 }
 
 bool zero_key = true;
+
+
 template<class T>
 void BPTree<T>::readFromDiskBlock(char *s, char *e) {
 
@@ -613,7 +615,7 @@ void BPTree<T>::readFromDiskBlock(char *s, char *e) {
         val = *(int*)(ts+key_size);
         ts += total_size;
 
-        if((key == 0 && val == 0)){
+        if((sizeof(key) == 1 && val == 0)){
             if(key_size == 4 && zero_key){
                 zero_key = false;
                 //判断是的确插入0-0 还是page里面的空值

@@ -235,7 +235,7 @@ bool TreeNode<T>::remove_at(int index) {
                 vals[i] = vals[i+1];
             }
             keys[key_num-1] = T();
-            keys[key_num-1] = int();
+            vals[key_num-1] = int();
         } else{
             for(int i = index;i<key_num-1;i++)
                 keys[i] = keys[i+1];

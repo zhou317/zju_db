@@ -54,6 +54,10 @@ public:
     int get_TableNum() { return tableNum; }//获取表数目
     int get_IndexNum() { return indexNum; }//获取索引数目
 
+    vector<Index> getAllIdx(){
+        return indexes;
+    }
+
 
     void show_Table();//展示表，用于测试程序
     void show_Index();//展示索引，用于测试程序

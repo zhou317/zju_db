@@ -15,25 +15,30 @@ void CatalogManager::readTable()
 
 
 	fstream  fin(filename.c_str(), ios::in);
-	fin >> tableNum;
-	for (i = 0; i < tableNum; i++)
-	{
-		Table temp_table;
-		fin >> temp_table.name;
-		fin >> temp_table.attriNum;
-		fin >> temp_table.blockNum;
-		for (j = 0; j < temp_table.attriNum; j++)
-		{
-			Attribute temp_attri;
-			fin >> temp_attri.name;
-			fin >> temp_attri.type;
-			fin >> temp_attri.length;
-			fin >> temp_attri.isPrimery;
-			fin >> temp_attri.isUnique;
-			temp_table.attributes.push_back(temp_attri);
-		}
-		tables.push_back(temp_table);
-	}
+
+    if (fin.peek() != EOF) {//文件非空
+        //cout << "not empty" << endl;
+        fin >> tableNum;
+        for (i = 0; i < tableNum; i++)
+        {
+            Table temp_table;
+            fin >> temp_table.name;
+            fin >> temp_table.attriNum;
+            fin >> temp_table.blockNum;
+            for (j = 0; j < temp_table.attriNum; j++)
+            {
+                Attribute temp_attri;
+                fin >> temp_attri.name;
+                fin >> temp_attri.type;
+                fin >> temp_attri.length;
+                fin >> temp_attri.isPrimery;
+                fin >> temp_attri.isUnique;
+                temp_table.attributes.push_back(temp_attri);
+            }
+            tables.push_back(temp_table);
+        }
+    }
+
 	fin.close();
 }
 
@@ -43,16 +48,19 @@ void CatalogManager::readIndex()
 	int i;
 	const string filename = "..\\database\\catalog\\index.catalog";
 	fstream  fin(filename.c_str(), ios::in);
-	fin >> indexNum;
-	for (i = 0; i < indexNum; i++)
-	{
-		Index temp_index;
-		fin >> temp_index.table_name;
-		fin >> temp_index.attribute_name;
-		fin >> temp_index.index_name;
-		fin >> temp_index.blockNum;
-		indexes.push_back(temp_index);
-	}
+    if (fin.peek() != EOF) {//文件非空
+        //cout << "not empty" << endl;
+        fin >> indexNum;
+        for (i = 0; i < indexNum; i++)
+        {
+            Index temp_index;
+            fin >> temp_index.table_name;
+            fin >> temp_index.attribute_name;
+            fin >> temp_index.index_name;
+            fin >> temp_index.blockNum;
+            indexes.push_back(temp_index);
+        }
+    }
 	fin.close();
 }
 
